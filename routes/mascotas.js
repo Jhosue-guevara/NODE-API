@@ -3,6 +3,7 @@ import axios from 'axios'; // Para descargar la imagen
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { authenticateToken } from '../middleware/auth.js';
 import mascotasController from '../controllers/mascotas.js';
 
 const route = express.Router();
@@ -11,8 +12,15 @@ const route = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Rutas protegidas
+route.post('/', authenticateToken, mascotasController.create); // Solo usuarios autenticados pueden crear mascotas
+route.get('/', mascotasController.getAll); // Ruta pública para obtener todas las mascotas
+route.get('/:id', mascotasController.getOne); // Ruta pública para obtener una mascota específica por ID
+route.put('/:id', authenticateToken, mascotasController.update); // Ruta protegida para actualizar mascotas
+route.delete('/:id', authenticateToken, mascotasController.delete); // Ruta protegida para eliminar mascotas
+
 // Ruta para subir una foto desde una URL
-route.post('/:id/foto-url', async (req, res) => {
+route.post('/:id/foto-url', authenticateToken, async (req, res) => {
     const { id } = req.params; // ID de la mascota
     const { fotoUrl } = req.body; // URL de la imagen a subir
 
@@ -65,5 +73,4 @@ route.post('/:id/foto-url', async (req, res) => {
 });
 
 export default route;
-
 
