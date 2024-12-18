@@ -1,4 +1,6 @@
 import express from 'express';
+import { fileURLToPath } from 'url';
+import path from 'path';
 import 'dotenv/config';
 import Mascotas from './models/mascotas.js'; // Importa la clase Mascotas
 import Usuarios from './models/usuarios.js'; // Importa la clase Usuarios
@@ -8,9 +10,16 @@ import usuarioRoutes from './routes/usuarios.js';
 import adopcionesRoutes from './routes/adopciones.js'; // Importa las rutas de adopciones
 import dbClient from './config/dbClient.js'; // Importa la conexión a la base de datos
 
+// Definir __filename y __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Crea la instancia de la aplicación Express
 const app = express();
 app.use(express.json()); // Middleware para manejar JSON
+
+// Sirve la carpeta de imágenes como estática
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 (async () => {
     try {

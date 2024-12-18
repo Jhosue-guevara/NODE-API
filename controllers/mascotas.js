@@ -92,6 +92,21 @@ class MascotasController {
             res.status(500).json({ message: 'Error al eliminar la mascota', error: error.message });
         }
     }
+
+    // Método para agregar una foto a una mascota.
+    async addPhoto(id, fotoUrl) {
+        try {
+            if (!mascotasModel) {
+                mascotasModel = new Mascotas();
+            }
+
+            const result = await mascotasModel.update(id, { fotoUrl }); // Actualiza el campo fotoUrl en el documento.
+            res.status(200).json({ status: 'foto-agregada', result });
+        } catch (error) {
+            res.status(500).json({ message: 'Error al agregar foto', error: error.message });
+        }
+    }
 }
 
 export default new MascotasController(); // Exporta una instancia del controlador.
+
