@@ -9,9 +9,10 @@ class Usuarios {
         this.collection = dbClient.db.collection('usuarios');
     }
 
+    // Crear un nuevo usuario
     async create(data) {
         try {
-            return await this.collection.insertOne(data);
+            return await this.collection.insertOne(data); // data debe incluir email, password, y rol
         } catch (error) {
             console.error("Error al crear usuario:", error.message);
             throw error;
@@ -70,6 +71,28 @@ class Usuarios {
             throw error;
         }
     }
+
+    // Buscar usuarios por rol
+    async findByRole(role) {
+        try {
+            return await this.collection.find({ rol: role }).toArray();
+        } catch (error) {
+            console.error("Error al buscar usuarios por rol:", error.message);
+            throw error;
+        }
+    }
+
+    // Verificar si un email ya está registrado
+    async emailExists(email) {
+        try {
+            const user = await this.collection.findOne({ email });
+            return !!user;
+        } catch (error) {
+            console.error("Error al verificar email:", error.message);
+            throw error;
+        }
+    }
 }
 
 export default Usuarios;
+

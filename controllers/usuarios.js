@@ -64,7 +64,7 @@ class UsuariosController {
 
             // Generar un token JWT
             const token = jwt.sign(
-                { id: user._id, rol: user.rol },
+                { id: user._id, rol: user.rol }, // Incluye el rol en el token
                 process.env.JWT_SECRET,
                 { expiresIn: '1h' } // Token válido por 1 hora
             );
